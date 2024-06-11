@@ -2,7 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import connectionDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
-import { errorHandler, notFound } from "./config/errorMiddleware.js";
+import chatRoutes from "./routes/chatRoutes.js";
+import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import cors from "cors";
 
 dotenv.config();
@@ -18,6 +19,7 @@ app.use(express.urlencoded({extended : true}));
 app.use(cors());
 
 app.use("/api/user" , userRoutes);
+app.use("/api/chat", chatRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

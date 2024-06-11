@@ -1,29 +1,17 @@
 import './App.css'
 import ChatPage from './component/ChatPage.jsx'
 import HomePage from './component/HomePage.jsx'
-import Error from "./component/Error.jsx"
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
-
-const appRouter = createBrowserRouter([
-  {
-    path: "/",
-    element: <HomePage />,
-    errorElement: <Error />
-  },
-  {
-    path: "/chats",
-    element: <ChatPage />,
-    errorElement: <Error />
-  }
-]);
+import { Route , Routes } from 'react-router-dom';
 
 function App() {
-
   return (
-    <div className='App'>
-      <RouterProvider router={appRouter}/>
+    <div className="App">
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/chats" element={<ChatPage />} />
+      </Routes>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

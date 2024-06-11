@@ -48,7 +48,12 @@ const authUser = asyncHandler(async (req,res) => {
 
     const user = await User.findOne({email});
 
-    const flag = await user.isPasswordCorrect(password);
+    let flag = false;
+
+    if(user)
+    {
+        flag = await user.isPasswordCorrect(password);
+    }
 
     if(user && flag)
     {
@@ -67,7 +72,24 @@ const authUser = asyncHandler(async (req,res) => {
     }
 });
 
+const allUsers = asyncHandler(async (req,res) => {
+
+    const keyword = req.query.search ? 
+    {
+        $or : [
+            { name : {$regex : req.query.search , $options : "i"} },
+            { email : {$regex : req.query.search , $options : "i"} }
+        ],
+    } 
+    : {};
+
+    const users = await User.find(keyword).find( { _id : { $ne : req.user._id} } );
+
+    return res.send(users);
+}); 
+
 export {
     registerUser,
-    authUser
+    authUser,
+    allUsers
 }
