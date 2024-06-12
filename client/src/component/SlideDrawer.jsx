@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Button, Text, Tooltip, Menu, MenuButton, MenuList, Avatar, MenuItem, MenuDivider, useDisclosure, Input, useToast} from "@chakra-ui/react"
 import { BellIcon, ChevronDownIcon, SearchIcon } from "@chakra-ui/icons";
 import { ChatState } from "../context/ChatProvider.jsx";
@@ -8,7 +8,8 @@ import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import { Drawer, DrawerBody, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton } from "@chakra-ui/modal";
 import UserListItem from './UserListItem.jsx';
-import {Spinner} from "@chakra-ui/spinner"
+import {Spinner} from "@chakra-ui/spinner";
+import { getSender }from "../config/ChatLogics.js";
 
 const SlideDrawer = () => {
 
@@ -19,9 +20,24 @@ const SlideDrawer = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { user , setSelectedChat , chats , setChats} = ChatState();
+  const { user , setSelectedChat , chats , setChats , notification , setNotification} = ChatState();
   const navigate = useNavigate();
   const toast = useToast();
+
+  useEffect(() => {
+
+    if(notification.length == 0)
+      return;
+
+    toast({
+      title : "You recieved a new message . Click on Bell icon to see..",
+      status : "success",
+      duration : 1000,
+      isClosable : true,
+      position : "top"
+    });
+
+  } , [notification])
 
   const accessChat = async (userId) => {
       
@@ -135,7 +151,22 @@ const SlideDrawer = () => {
             <MenuButton p="1">
               <BellIcon boxSize={6} mx={"2"} />
             </MenuButton>
-            {/* <MenuList></MenuList> */}
+            <MenuList pl={2}>
+            {!notification.length && "No New Messages"}
+              {notification.map((notif) => (
+                <MenuItem
+                  key={notif._id}
+                  onClick={() => {
+                    setSelectedChat(notif.chat);
+                    setNotification(notification.filter((n) => n !== notif));
+                  }}
+                >
+                  {notif.chat.isGroupChat
+                    ? `New Message in ${notif.chat.chatName}`
+                    : `New Message from ${getSender(user, notif.chat.users)}`}
+                </MenuItem>
+              ))}
+            </MenuList>
           </Menu>
 
           <Menu>
