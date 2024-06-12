@@ -22,7 +22,7 @@ const handleGroup = (userToAdd) => {
     toast({
         title: "User already added",
         status: "warning",
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
         position: "top",
     });
@@ -46,7 +46,7 @@ const handleSearch = async (query) => {
         },
     };
     const { data } = await axios.get(`http://localhost:3000/api/user?search=${search}`, config);
-    console.log(data);
+
     setLoading(false);
     setSearchResult(data);
     } catch (error) {
@@ -143,7 +143,7 @@ return (
                 onChange={(e) => handleSearch(e.target.value)}
             />
             </FormControl>
-            <Box w="100%" d="flex" flexWrap="wrap">
+            <Box w="100%" display="flex" flexWrap="wrap">
             {selectedUsers.map((u) => (
                 <UserBadgeItem
                 key={u._id}

@@ -17,7 +17,9 @@ const MyChats = ({ fetchAgain }) => {
   const toast = useToast();
 
   const fetchChats = async () => {
-    // console.log(user._id);
+    console.log("Inside My chats..");
+    
+    console.log(user.token);
     try {
       const config = {
         headers: {
@@ -63,7 +65,7 @@ const MyChats = ({ fetchAgain }) => {
        <Box
         pb={3}
         px={3}
-        fontSize={{ base: "28px", md: "30px" }}
+        fontSize={{ base: "22px", md: "24px" }}
         fontFamily="Poppins"
         display="flex"
         w="100%"
